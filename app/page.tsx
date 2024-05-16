@@ -1,5 +1,5 @@
-import Pricing from '@/components/ui/Pricing/Pricing';
 import { createClient } from '@/utils/supabase/server';
+import Link from 'next/link';
 
 export default async function PricingPage() {
   const supabase = createClient();
@@ -8,29 +8,14 @@ export default async function PricingPage() {
     data: { user }
   } = await supabase.auth.getUser();
 
-  const { data: subscription, error } = await supabase
-    .from('subscriptions')
-    .select('*, prices(*, products(*))')
-    .in('status', ['trialing', 'active'])
-    .maybeSingle();
-
-  if (error) {
-    console.log(error);
-  }
-
-  const { data: products } = await supabase
-    .from('products')
-    .select('*, prices(*)')
-    .eq('active', true)
-    .eq('prices.active', true)
-    .order('metadata->index')
-    .order('unit_amount', { referencedTable: 'prices' });
-
   return (
-    <Pricing
-      user={user}
-      products={products ?? []}
-      subscription={subscription}
-    />
+    <div className="flex items-center justify-center">
+          <Link
+            href="/jupyterlite"
+            className="flex items-center flex-initial font-bold md:mr-24"
+          >
+            <span>JupyterLite</span>
+          </Link>
+    </div>
   );
 }

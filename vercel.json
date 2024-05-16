@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/jupyterlite",
+      "destination": "qsai-jupyterlite.vercel.app"
+    }
+  ]
+}
