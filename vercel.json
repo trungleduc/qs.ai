@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/jupyterlite",
+      "destination": "https://qsai-jupyterlite.vercel.app/lab/index.html"
+    }
+  ]
+}
