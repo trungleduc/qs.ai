@@ -11,7 +11,7 @@ export default async function PricingPage() {
   return (
     <div className="flex items-center justify-center">
           <Link
-            href="/jupyterlite"
+            href="/jupyterlite/lab/index.html"
             className="flex items-center flex-initial font-bold md:mr-24"
           >
             <span>JupyterLite</span>
