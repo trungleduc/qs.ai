@@ -4,7 +4,7 @@ import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { getURL, getErrorRedirect, getStatusRedirect } from 'utils/helpers';
-import { getAuthTypes } from 'utils/auth-helpers/settings';
+import { QSAI_COOKIE_NAME, getAuthTypes } from 'utils/auth-helpers/settings';
 
 function isValidEmail(email: string) {
   var regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
@@ -28,7 +28,9 @@ export async function SignOut(formData: FormData) {
       'You could not be signed out.'
     );
   }
-
+  const cookieStore = cookies();
+  cookieStore.delete(QSAI_COOKIE_NAME.accessToken);
+  cookieStore.delete(QSAI_COOKIE_NAME.refreshToken);
   return '/signin';
 }
 

@@ -47,3 +47,8 @@ export const getDefaultSignInView = (preferredSignInView: string | null) => {
 export const getRedirectMethod = () => {
   return allowServerRedirect ? 'server' : 'client';
 };
+
+export const QSAI_COOKIE_NAME = {
+  accessToken: 'qsai-access-token',
+  refreshToken: 'qsai-refresh-token'
+};
