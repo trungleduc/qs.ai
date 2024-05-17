@@ -26,6 +26,15 @@ export default function Navlinks({ user }: NavlinksProps) {
             Pricing
           </Link>
           {user && (
+            <Link
+              href="/jupyterlite/lab/index.html"
+              target="_blank"
+              className={s.link}
+            >
+              <span>JupyterLite</span>
+            </Link>
+          )}
+          {user && (
             <Link href="/account" className={s.link}>
               Account
             </Link>
