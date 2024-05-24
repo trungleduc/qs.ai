@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { getURL, getErrorRedirect, getStatusRedirect } from 'utils/helpers';
 import { QSAI_COOKIE_NAME, getAuthTypes } from 'utils/auth-helpers/settings';
+import { createUserStorage } from '../storage/create_user_folder';
 
 function isValidEmail(email: string) {
   var regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
@@ -54,7 +55,6 @@ export async function signInWithEmail(formData: FormData) {
     emailRedirectTo: callbackURL,
     shouldCreateUser: true
   };
-
   // If allowPassword is false, do not create a new user
   const { allowPassword } = getAuthTypes();
   if (allowPassword) options.shouldCreateUser = false;
@@ -70,6 +70,7 @@ export async function signInWithEmail(formData: FormData) {
       error.message
     );
   } else if (data) {
+    await createUserStorage({ supabase, session: data.session });
     cookieStore.set('preferredSignInView', 'email_signin', { path: '/' });
     redirectPath = getStatusRedirect(
       '/signin/email_signin',
@@ -138,7 +139,6 @@ export async function signInWithPassword(formData: FormData) {
   const email = String(formData.get('email')).trim();
   const password = String(formData.get('password')).trim();
   let redirectPath: string;
-
   const supabase = createClient();
   const { error, data } = await supabase.auth.signInWithPassword({
     email,
@@ -152,6 +152,7 @@ export async function signInWithPassword(formData: FormData) {
       error.message
     );
   } else if (data.user) {
+    await createUserStorage({ supabase, session: data.session });
     cookieStore.set('preferredSignInView', 'password_signin', { path: '/' });
     redirectPath = getStatusRedirect('/', 'Success!', 'You are now signed in.');
   } else {
