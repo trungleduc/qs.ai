@@ -45,8 +45,27 @@ export async function GET(request: NextRequest) {
         }
       );
     }
-  }
 
+    const userId = data.session?.user.id;
+    const authorization = data.session?.access_token;
+    if (userId && authorization) {
+      const filePath = `${userId}/.emptyFolderPlaceholder`;
+      const checkPath = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/qsai/${filePath}`;
+      const response = await fetch(checkPath, {
+        method: 'HEAD',
+        headers: {
+          authorization: authorization
+        }
+      });
+      const status = await response.status;
+      if (status === 400) {
+        supabase.storage.from('qsai').upload(filePath, new Blob([]), {
+          cacheControl: '3600',
+          upsert: false
+        });
+      }
+    }
+  }
   // URL to redirect to after sign in process completes
   return NextResponse.redirect(
     getStatusRedirect(
